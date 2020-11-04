@@ -50,13 +50,12 @@ require("database_Connection.php");
                 $result = 0;
                 $i = 1;
                 $selectedQuestions = $_POST['options'];
-                print_r($selectedQuestions);
 
                 $sql = "SELECT * FROM questions";
                 $results = $connection->query($sql);
 
                 while ($rows = mysqli_fetch_array($results)) {
-
+                    
                     $answer = $rows['ans_key'] == $selectedQuestions[$i];
 
                     if ($answer) {
