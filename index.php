@@ -1,3 +1,7 @@
+<?php
+require("database_Connection.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -56,10 +60,31 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     />
-    <title>DOCS</title>
+    <title>Biologycraze Quizer Web App</title>
   </head>
   <body>
   
+  <section class="container">
+  <div class="card"><!--Card Start-->
+  <form action="results.php" method="POST">
+  <?php
+  for($i=1; $i<6; $i++){
+    $questions = "SELECT * FROM questions WHERE q_id = $i";
+    $result = $connection->query($questions);
+    while($row = $result->fetch_assoc()){
+  ?>
+    <div class="card-header bg-success text-white">
+      <?php echo $i.'. '.$row['questions']; ?>
+    </div>
+  
+  <?php
+    }
+  }
+  ?>
+
+  </form>
+ </div><!--Card End-->
+  </section>
 
     <!--Jquery JS-->
     <script
@@ -72,3 +97,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   </body>
 </html>
+
+
+
+
+
