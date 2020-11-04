@@ -100,8 +100,8 @@ require("database_Connection.php");
                         </thead>
                         <tbody>
                             <tr>
-                                <td><?php echo "Out of 5 Questions You Have Selected " . $count . " Questions"; ?></td>
-                                <td><?php echo "<br> Your Total Score is " . $result; ?></td>
+                                <th><?php echo "Out of 5 Questions You Have Selected " . $count . " Questions"; ?></th>
+                                <th><?php echo "Your Total Score is " . $result; ?></th>
                             </tr>
                         </tbody>
                     </table>
