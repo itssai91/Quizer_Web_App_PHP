@@ -57,10 +57,10 @@ require("database_Connection.php");
             <?php
             $answers = "SELECT * FROM answers WHERE ans_id = $i";
             $data = $connection->query($answers);
-              while ($rows = $data->fetch_assoc()) {
+            while ($rows = $data->fetch_assoc()) {
             ?>
               <div class="card-body">
-                <input type="radio" name="check[]" value="<?php echo $rows['a_id']; ?>">
+                <input type="radio" name="check[<?php echo $rows['ans_id']; ?>]" value="<?php echo $rows['a_id']; ?>">
                 <?php echo $rows['answer']; ?>
               </div>
         <?php
