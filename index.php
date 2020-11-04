@@ -76,8 +76,19 @@ require("database_Connection.php");
     <div class="card-header bg-success text-white">
       <?php echo $i.'. '.$row['questions']; ?>
     </div>
-  
+
+
+    <?php
+    $answers = "SELECT * FROM answers WHERE ans_id = $i";
+    $data = $connection->query($answers);
+    while($rows = $data->fetch_assoc()){
+    ?>
+    <div class="card-body">
+      <input type="radio" name="check[]" value="<?php echo $rows['a_id']; ?>">
+      <?php echo $rows['answer']; ?>
+    </div>
   <?php
+    }
     }
   }
   ?>
