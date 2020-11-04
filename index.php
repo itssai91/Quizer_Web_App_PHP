@@ -60,7 +60,7 @@ require("database_Connection.php");
             while ($rows = $data->fetch_assoc()) {
             ?>
               <div class="card-body">
-                <input type="radio" name="check[<?php echo $rows['ans_id']; ?>]" value="<?php echo $rows['a_id']; ?>">
+                <input type="radio" name="options[<?php echo $rows['ans_id']; ?>]" value="<?php echo $rows['a_id']; ?>">
                 <?php echo $rows['answer']; ?>
               </div>
         <?php
@@ -69,7 +69,7 @@ require("database_Connection.php");
         }
         ?>
 
-        <input type="button" name="submit" class="btn btn-success m-auto d-block" value="Submit">
+        <input type="submit" name="submit" class="btn btn-success m-auto d-block" value="Submit">
       </form>
     </div>
     <!--Card End-->

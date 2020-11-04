@@ -41,7 +41,35 @@ require("database_Connection.php");
     <section class="container">
 
         <?php
-        if (isset(POST['submit']))
+        if (isset($_POST['submit'])) {
+            if (!empty($_POST['options'])) {
+
+                $count = count($_POST['options']);
+                echo "Out of 5 Questions You Have Selected " . $count . " Questions";
+
+                $result = 0;
+                $i = 1;
+                $selectedQuestions = $_POST['options'];
+                print_r($selectedQuestions);
+
+                $sql = "SELECT * FROM questions";
+                $results = $connection->query($sql);
+
+                while ($rows = mysqli_fetch_array($results)) {
+
+                    $answer = $rows['ans_key'] == $selectedQuestions[$i];
+
+                    if ($answer) {
+
+                        $result++;
+                    }
+                    $i++;
+                }
+                echo "<br> Your Total Score is " . $result;
+            } else {
+                echo "Please Select All the Options First";
+            }
+        }
         ?>
 
 
