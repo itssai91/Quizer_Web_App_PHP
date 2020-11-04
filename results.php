@@ -45,7 +45,6 @@ require("database_Connection.php");
             if (!empty($_POST['options'])) {
 
                 $count = count($_POST['options']);
-                echo "Out of 5 Questions You Have Selected " . $count . " Questions";
 
                 $result = 0;
                 $i = 1;
@@ -55,7 +54,34 @@ require("database_Connection.php");
                 $results = $connection->query($sql);
 
                 while ($rows = mysqli_fetch_array($results)) {
-                    
+        ?>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <th>
+                                    <?php echo "Q" . $i; ?>
+                                </th>
+                                <th>
+                                    <?php echo "Q" . $i . " Answer" ?>
+                                </th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><?php echo $rows['questions']; ?></td>
+                                    <?php
+                                    $ansKey = "SELECT answer FROM answers WHERE a_id = $selectedQuestions[$i] ";
+                                    $dataFetch = $connection->query($ansKey);
+                                    while ($lines = mysqli_fetch_array($dataFetch)) {
+                                    ?>
+                                        <td><?php echo $lines['answer']; ?></td>
+                                </tr>
+                            <?php
+                                    }
+                            ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php
                     $answer = $rows['ans_key'] == $selectedQuestions[$i];
 
                     if ($answer) {
@@ -64,7 +90,23 @@ require("database_Connection.php");
                     }
                     $i++;
                 }
-                echo "<br> Your Total Score is " . $result;
+                ?>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th colspan="2" class="text-center bg-success text-white">Your Score Card</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><?php echo "Out of 5 Questions You Have Selected " . $count . " Questions"; ?></td>
+                                <td><?php echo "<br> Your Total Score is " . $result; ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        <?php
             } else {
                 echo "Please Select All the Options First";
             }
