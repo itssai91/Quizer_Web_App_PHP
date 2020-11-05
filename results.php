@@ -1,4 +1,5 @@
 <?php
+session_start();
 require("database_Connection.php");
 ?>
 
@@ -41,76 +42,94 @@ require("database_Connection.php");
     <section class="container">
 
         <?php
-        if (isset($_POST['submit'])) {
-            if (!empty($_POST['options'])) {
+        if (isset($_SESSION['is_login'])) {
+            if (isset($_POST['submit'])) {
+                if (!empty($_POST['options'])) {
 
-                $count = count($_POST['options']);
+                    $count = count($_POST['options']);
 
-                $result = 0;
-                $i = 1;
-                $selectedQuestions = $_POST['options'];
+                    $result = 0;
+                    $i = 1;
+                    $selectedQuestions = $_POST['options'];
 
-                $sql = "SELECT * FROM questions";
-                $results = $connection->query($sql);
+                    $sql = "SELECT * FROM questions";
+                    $results = $connection->query($sql);
 
-                while ($rows = mysqli_fetch_array($results)) {
+                    while ($rows = mysqli_fetch_array($results)) {
+
         ?>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <th>
+                                        <?php echo "Q" . $i; ?>
+                                    </th>
+                                    <th>
+                                        <?php echo "Q" . $i . " Answer" ?>
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><?php echo $rows['questions']; ?></td>
+                                        <?php
+                                        $ansKey = "SELECT answer FROM answers WHERE a_id = $selectedQuestions[$i] ";
+                                        $dataFetch = $connection->query($ansKey);
+                                        while ($lines = mysqli_fetch_array($dataFetch)) {
+                                        ?>
+                                            <td><?php echo $lines['answer']; ?></td>
+                                    </tr>
+                                <?php
+                                        }
+                                ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php
+                        $answer = $rows['ans_key'] == $selectedQuestions[$i];
+
+                        if ($answer) {
+
+                            $result++;
+                        }
+                        $i++;
+                    }
+                    ?>
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
-                                <th>
-                                    <?php echo "Q" . $i; ?>
-                                </th>
-                                <th>
-                                    <?php echo "Q" . $i . " Answer" ?>
-                                </th>
+                                <tr>
+                                    <th colspan="2" class="text-center bg-success text-white">BiologyCraze Test Score Card</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><?php echo $rows['questions']; ?></td>
-                                    <?php
-                                    $ansKey = "SELECT answer FROM answers WHERE a_id = $selectedQuestions[$i] ";
-                                    $dataFetch = $connection->query($ansKey);
-                                    while ($lines = mysqli_fetch_array($dataFetch)) {
-                                    ?>
-                                        <td><?php echo $lines['answer']; ?></td>
+                                    <th>Your Name: </th>
+                                    <td><?php echo $_SESSION['userName']; ?></td>
                                 </tr>
-                            <?php
-                                    }
-                            ?>
+                                <tr>
+                                    <th><?php echo "Out of " . 5 . " Questions You Have Attempted: "; ?> </th>
+                                    <td><?php echo $count . " Questions"; ?></td>
+                                </tr>
+                                <tr>
+                                    <th>Your Score: </th>
+                                    <td><?php echo  $result . " Out of " . 5; ?></td>
+                                </tr>
+                                <tr>
+                                    <td><button onclick="window.print()" class="btn btn-success d-block m-auto">Print</button></td>
+                                    <td><a href="logout.php" class="btn btn-danger d-block m-auto">Logout</a></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-                <?php
-                    $answer = $rows['ans_key'] == $selectedQuestions[$i];
-
-                    if ($answer) {
-
-                        $result++;
-                    }
-                    $i++;
-                }
-                ?>
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th colspan="2" class="text-center bg-success text-white">Your Score Card</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th><?php echo "Out of 5 Questions You Have Selected " . $count . " Questions"; ?></th>
-                                <th><?php echo "Your Total Score is " . $result; ?></th>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
         <?php
-            } else {
-                echo "Please Select All the Options First";
+                } else {
+                    echo "Please Select All the Options First";
+                }
             }
         }
+        $userName   =   $_SESSION['userName'];
+        $insertResult = "INSERT INTO sessions (name, result) VALUES ('$userName', '$result')";
+        $insertData = $connection->query($insertResult);
         ?>
 
 
